@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Authors on pwnbuff3r</title>
+    <link>https://pwnbuffer.github.io/pt-br/authors/</link>
+    <description>Recent content in Authors on pwnbuff3r</description>
+    <generator>Hugo</generator>
+    <language>pt-br</language>
+    <atom:link href="https://pwnbuffer.github.io/pt-br/authors/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>86daemon</title>
+      <link>https://pwnbuffer.github.io/pt-br/authors/86daemon/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://pwnbuffer.github.io/pt-br/authors/86daemon/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>

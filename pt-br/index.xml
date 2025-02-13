@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>pwnbuff3r</title>
+    <link>https://pwnbuffer.github.io/pt-br/</link>
+    <description>Recent content on pwnbuff3r</description>
+    <generator>Hugo</generator>
+    <language>pt-br</language>
+    <lastBuildDate>Thu, 28 Feb 2019 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://pwnbuffer.github.io/pt-br/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>About</title>
+      <link>https://pwnbuffer.github.io/pt-br/about/</link>
+      <pubDate>Thu, 28 Feb 2019 00:00:00 +0000</pubDate>
+      <guid>https://pwnbuffer.github.io/pt-br/about/</guid>
+      <description>🇧🇷 Somos uma equipe brasileira de entusiastas de tecnologia e hacking.&#xA;Discord: server&#xA;&amp;ldquo;Acreditamos que o conhecimento deve ser livre&amp;rdquo; Link para o cabeçalho </description>
+    </item>
+    <item>
+      <title>86daemon</title>
+      <link>https://pwnbuffer.github.io/pt-br/members/daemon/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://pwnbuffer.github.io/pt-br/members/daemon/</guid>
+      <description> github: 86daemon&#xA;Angel of i386 Link para o cabeçalho Dica _._ _,-&amp;#39;&amp;#34;&amp;#34;`-._ (,-.`._,&amp;#39;( |\`-/| `-.-&amp;#39; \ )-`( , o o) `- \`_`&amp;#34;&amp;#39;- </description>
+    </item>
+    <item>
+      <title>kz0x</title>
+      <link>https://pwnbuffer.github.io/pt-br/members/kz0x/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://pwnbuffer.github.io/pt-br/members/kz0x/</guid>
+      <description> ╱|、 (˚ˎ 。7 |、˜〵 じしˍ,)ノ github: Kz0x-337&#xA;Dica Web hacking, exploit developer and Maldev </description>
+    </item>
+    <item>
+      <title>Membros</title>
+      <link>https://pwnbuffer.github.io/pt-br/members/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://pwnbuffer.github.io/pt-br/members/</guid>
+      <description> daemon tteuw愛 slayer kz0x </description>
+    </item>
+    <item>
+      <title>sl4yer</title>
+      <link>https://pwnbuffer.github.io/pt-br/members/slayer/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://pwnbuffer.github.io/pt-br/members/slayer/</guid>
+      <description> github: slayerkkkk&#xA;Olá, me chamo slayer. Estou na área de segurança cibernética há 3 anos e atualmente estou estudando mais sobre low level Link para o cabeçalho Dica Low Level ⚙️ </description>
+    </item>
+    <item>
+      <title>tteuw愛</title>
+      <link>https://pwnbuffer.github.io/pt-br/members/tteuw/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://pwnbuffer.github.io/pt-br/members/tteuw/</guid>
+      <description> github: tteuw00111111&#xA;Dica software dev, maldev e analysis, curto engenharia reversa também. E um pouco de web (não o suficiente) </description>
+    </item>
+  </channel>
+</rss>
