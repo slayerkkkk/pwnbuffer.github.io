@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>
+  Windows Architecture · pwnbuffer
+</title>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+
+
+
+
+<meta name="author" content="pwnbuffer">
+<meta name="description" content="Windows Architecute for malware development">
+<meta name="keywords" content="team brazuca!">
+
+
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Windows Architecture">
+  <meta name="twitter:description" content="Windows Architecute for malware development">
+
+<meta property="og:url" content="https://pwnbuffer.github.io/posts/tteuw/windows_architecture/">
+  <meta property="og:site_name" content="pwnbuffer">
+  <meta property="og:title" content="Windows Architecture">
+  <meta property="og:description" content="Windows Architecute for malware development">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-02-08T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-02-08T00:00:00+00:00">
+    <meta property="article:tag" content="Maldev">
+    <meta property="article:tag" content="Windows">
+    <meta property="article:tag" content="Malware">
+    <meta property="article:tag" content="Architecture">
+    <meta property="article:tag" content="Memory">
+
+
+
+
+<link rel="canonical" href="https://pwnbuffer.github.io/posts/tteuw/windows_architecture/">
+
+
+<link rel="preload" href="https://pwnbuffer.github.io/fonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="https://pwnbuffer.github.io/fonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="https://pwnbuffer.github.io/fonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
+
+
+  
+  
+  <link rel="stylesheet" href="https://pwnbuffer.github.io/css/coder.min.b886fe0d9034709648f91f4ce178f51dd367d9350f82dd1132d54fd69bfca66f.css" integrity="sha256-uIb&#43;DZA0cJZI&#43;R9M4Xj1HdNn2TUPgt0RMtVP1pv8pm8=" crossorigin="anonymous" media="screen" />
+
+
+
+
+
+
+  
+    
+    
+    <link rel="stylesheet" href="https://pwnbuffer.github.io/css/coder-dark.min.165f5fe7c98269a5cfc54f81472e0f84ebc32d92bbe6c9db1f06962b0817bda1.css" integrity="sha256-Fl9f58mCaaXPxU&#43;BRy4PhOvDLZK75snbHwaWKwgXvaE=" crossorigin="anonymous" media="screen" />
+  
+
+
+
+ 
+
+
+
+
+<link rel="icon" type="image/svg+xml" href="https://pwnbuffer.github.io/img/favicon.svg" sizes="any">
+<link rel="icon" type="image/png" href="https://pwnbuffer.github.io/img/favicon-32x32.ico" sizes="32x32">
+<link rel="icon" type="image/png" href="https://pwnbuffer.github.io/img/favicon-16x16.ico" sizes="16x16">
+
+<link rel="apple-touch-icon" href="https://pwnbuffer.github.io/images/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://pwnbuffer.github.io/images/apple-touch-icon.png">
+
+<link rel="manifest" href="https://pwnbuffer.github.io/site.webmanifest">
+<link rel="mask-icon" href="https://pwnbuffer.github.io/images/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+
+
+</head>
+
+
+
+
+
+
+<body class="preload-transitions colorscheme-dark">
+  
+
+  <main class="wrapper">
+    <nav class="navigation">
+  <section class="container">
+    
+    <a class="navigation-title" href="https://pwnbuffer.github.io/">
+      pwnbuffer
+    </a>
+    
+    
+      <input type="checkbox" id="menu-toggle" />
+      <label class="menu-button float-right" for="menu-toggle">
+        <i class="fa-solid fa-bars fa-fw" aria-hidden="true"></i>
+      </label>
+      <ul class="navigation-list">
+        
+          
+            <li class="navigation-item">
+              <a class="navigation-link " href="https://pwnbuffer.github.io/about/">About</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link " href="https://pwnbuffer.github.io/posts/">Posts</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link " href="https://pwnbuffer.github.io/categories/">Categories</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link " href="https://pwnbuffer.github.io/members/">Members</a>
+            </li>
+          
+        
+        
+          
+          
+          
+            
+          
+            
+              
+                <li class="navigation-item menu-separator">
+                  <span>|</span>
+                </li>
+                
+              
+              <li class="navigation-item">
+                <a href="https://pwnbuffer.github.io/pt-br/">🇧🇷</a>
+              </li>
+            
+          
+        
+      </ul>
+    
+  </section>
+</nav>
+
+
+    <div class="content">
+      
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">
+            <a class="title-link" href="https://pwnbuffer.github.io/posts/tteuw/windows_architecture/">
+              Windows Architecture
+            </a>
+          </h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fa-solid fa-calendar" aria-hidden="true"></i>
+              <time datetime="2025-02-08T00:00:00Z">
+                February 8, 2025
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fa-solid fa-clock" aria-hidden="true"></i>
+              11-minute read
+            </span>
+          </div>
+          <div class="authors">
+  <i class="fa-solid fa-user" aria-hidden="true"></i>
+    <a href="https://pwnbuffer.github.io/authors/tteuw/">Tteuw</a>
+      <span class="separator">•</span>
+    <a href="https://pwnbuffer.github.io/authors/slayer/">Slayer</a></div>
+
+          <div class="categories">
+  <i class="fa-solid fa-folder" aria-hidden="true"></i>
+    <a href="https://pwnbuffer.github.io/categories/low-level/">Low-Level</a>
+      <span class="separator">•</span>
+    <a href="https://pwnbuffer.github.io/categories/windows/">Windows</a>
+      <span class="separator">•</span>
+    <a href="https://pwnbuffer.github.io/categories/maldev/">Maldev</a></div>
+
+          <div class="tags">
+  <i class="fa-solid fa-tag" aria-hidden="true"></i>
+    <span class="tag">
+      <a href="https://pwnbuffer.github.io/tags/maldev/">Maldev</a>
+    </span>
+      <span class="separator">•</span>
+    <span class="tag">
+      <a href="https://pwnbuffer.github.io/tags/windows/">Windows</a>
+    </span>
+      <span class="separator">•</span>
+    <span class="tag">
+      <a href="https://pwnbuffer.github.io/tags/malware/">Malware</a>
+    </span>
+      <span class="separator">•</span>
+    <span class="tag">
+      <a href="https://pwnbuffer.github.io/tags/architecture/">Architecture</a>
+    </span>
+      <span class="separator">•</span>
+    <span class="tag">
+      <a href="https://pwnbuffer.github.io/tags/memory/">Memory</a>
+    </span></div>
+
+        </div>
+      </header>
+
+      <div class="post-content">
+        
+        <p><strong>Prerequisites:</strong>
+Requirements for the users that are planning to learn Malware Development are first of all basics of programming, since mostly deals with the C programming lanaguage, it is a requirement that you are familiar with fundamentals of C.</p>
+<p>So what is actually <strong>Windows Architecture</strong>?
+It is what happens under the hood of Windows processes and applications, the internal structure of the Windows operating system, envolves layers like hardware, kernel, executive services, and subsystem DLLs.</p>
+<h1 id="windows-architecture">
+  Windows Architecture
+  <a class="heading-link" href="#windows-architecture">
+    <i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h1>
+<p>First things firts, let&rsquo;s clear out a few terms:</p>
+<p>What is a <strong>processor</strong>?</p>
+<p>The processor is the CPU, the hardware that performs instructions.
+It <strong>fetches</strong>, <strong>decodes</strong>, and <strong>executes</strong> machine instructions, perform <strong>arithmetic</strong> and <strong>logical operations</strong>, also manages the flow of control between various programs (or processes) running on the machine.</p>
+<p>What is an <strong>application</strong>?</p>
+<p>An application is a program that runs on the operating system, usi its resources to function.
+Is stored on disk as an executable <strong>file</strong>(or set of files), when run, Windows loads the application into memory as one or more <strong>processes</strong>.
+The application&rsquo;s code along with its resources (<strong>data</strong>, <strong>libraries</strong>, <strong>etc</strong>), then runs under the direction of the operating system and is executed by the <strong>processor</strong>.
+There is a separtion that you must get it, between the <strong>program</strong> <strong>file</strong> (the code) and its <strong>process</strong> (the running instance).</p>
+<p><strong>Subsystem DLLs:</strong></p>
+<p>Subsystem DLLs are dynamic link libraries that implement the user-mode subsystems of Windows (explained down below). In Windows, much of the functionality provided to applications isn’t built into the kernel—it’s offered via these modular DLLs. Examples include libraries like <strong><code>kernel32.dll</code></strong>, <strong>user32.dll</strong>, <strong>gdi32.dll</strong>, and others. Each of these is designed to provide a specific set of services like <strong><code>kernel32.dll</code></strong> that offers ore functions for memory management, process creation, and file I/O, <strong>user32.dll</strong> that implements user interface components (windows, messages, input handling) or <strong>gdi32.dll</strong> that deals with graphics device interface functions for drawing and font management.</p>
+<p>Bridge the gap between high-level application code and the Windows kernel. When an application makes an API call to perform a task (like opening a window or reading from a file), it typically calls a function in one of these subsystem DLLs. The DLL then translates that request into lower-level system calls that the kernel can process. This layered, modular design keeps the system efficient and easier to update.</p>
+<p><strong><strong>Windows API</strong>:</strong></p>
+<p>The <strong><strong>Windows API</strong></strong> (A<strong>pplication Programming Interface</strong>) is the complete set of functions, data structures, and conventions that Microsoft exposes to allow applications to interact with Windows. Informally known as <strong>Win32</strong> (for the 32-bit version) or simply <strong><strong>Windows API</strong></strong>, it is the standard way for developers to request services from the operating system.</p>
+<p>The API is vast, covering functions for:</p>
+<ul>
+<li>Process management, file I/O, memory allocation (e.g., <strong><code>CreateProcess</code></strong>, <strong><code>ReadFile</code></strong>).</li>
+<li>Creating and managing windows, processing messages, drawing graphics (like <strong><code>CreateWindow</code></strong>, <strong><code>MessageBox</code></strong>).</li>
+<li><strong>GDI/GDI+</strong> for drawing text and images.</li>
+</ul>
+<p><strong>How It Works:</strong><br>
+When you write a Windows application, you include header files (<strong>windows.h</strong>) that declare these functions and types. At runtime, your application’s calls are routed through the Windows loader to the appropriate subsystem DLL, which then communicates with the kernel. This call flow from the application, through the DLL (using functions like <strong><code>LoadLibrary</code></strong> and <strong><code>GetProcAddress</code></strong> if needed), and finally to the kernel is the backbone of how Windows maintains control while allowing third-party programs to perform complex tasks.</p>
+<p>So basically the Subsystem DLLs are the modular libraries that provides Windows core services to applications, isolating them from directly hardware interactions and the <strong>Windows API</strong> is the full set of functions and conventions that let applications request and use Windows services, enabling tasks from file operations to GUI management.</p>
+<p>So after this has been cleared out, let&rsquo;s actually understand the Windows Architecture.
+A processor inside a machine running the <strong>Windows OS</strong> can operate under two different modes:</p>
+<p><strong>User Mode</strong> and <strong>Kernel Mode</strong>, <strong>Applications</strong> run in <strong>user mode</strong>, and <strong>operating system components</strong> run in <strong>kernel mode</strong>. When an application wants to accomplish a task, such as creating a file, it cannot do so on its own. The only entity that can complete the task is the <strong>Kernel</strong>, so instead applications must follow a specific <strong>call flow</strong>.</p>
+<p><strong>What all of that means?</strong></p>
+<p><strong>User mode</strong> is where regular apps run with <strong>limited privileges</strong>, while <strong>kernel mode</strong> is where the <strong>system&rsquo;s core functions</strong>, like device drivers, operate with full access to hardware</p>
+<p><strong>User Mode vs Kernel Mode</strong></p>
+<p><strong>User Mode:</strong></p>
+<p>Regular applications and most noncritical processes run, the code is executed with limited privileges, why this isolation occurs?</p>
+<p>This isolation prevents a faulty or malicious application from directly tampering with system hardware or core services, but as we will see in the future, it has its work arounds.
+Each application running in <strong>user mode</strong> is isolated in its own virtual address space, so for example a crash or error in one process won&rsquo;t necessarily bring down the entire system.
+So the applications utilize high-level APIs provided by the subsystem DLLs (like, <strong><code>kernel32.dll</code></strong>, <strong><code>user32.dll</code></strong>) to perform tasks, these handle the necessary preliminary processing and then request services from the operating system.</p>
+<p><strong>Kernel Mode:</strong></p>
+<p>The kernel mode is the highly privilege layer of the Windows OS, is where the Windows Kernel, device drivers, and core system services run, the code that runs in kernel mode can directly access hardware and system memory.</p>
+<p>Kernel mode has unrestricted access, critical for performing essential operations like hardware management, memory allocation, and I/O operations(input/output), a failure here can bring the whole system down.</p>
+<p><strong>System Calls:</strong></p>
+<p>When a <strong>user mode</strong> program needs to access hardware or perform privileged operations, it makes a system call. This essentially triggers a request that gets processed by <strong>kernel mode</strong>.</p>
+<p>For better understanding, let&rsquo;s breakdown:</p>
+<p><img src="https://pwnbuffer.github.io/images/tteuw/windows_architecture/windows_arch.png" alt="Windows Architecture"></p>
+<p>So the <strong>User Processes</strong> (program/application executed by the user) calls <strong>Subsystem DLLs</strong> (DLLs that contain API functions that are called by <strong>User Processes</strong>, like <strong><code>kernel32.dll</code></strong> exporting <code>CreateFile</code> <strong>Windows API</strong>) then calls <strong><code>Ntdll.dll</code></strong> (A system-wide DLL which is the lowest layer available in <strong>user mode</strong>. This is a special DLL that creates the transition from <strong>user mode</strong> to <strong>kernel mode</strong>. This is often referred to as the <strong><strong>Native API</strong></strong> or <strong>NTAPI</strong>.) after that <strong>Executive Kernel</strong> (This is what is known as the <strong>Windows Kernel</strong> and it calls other
+drivers and modules available within <strong>kernel mode</strong> to complete tasks. The Windows
+kernel is partially stored in a file called <strong>ntoskrnl.exe</strong> under <code>&quot;C:\Windows\System32&quot;</code>.)</p>
+<p>How this transition works from <strong>user mode</strong> to <strong>kernel mode</strong>?</p>
+<p>This transition is part of what is know as <strong>Function Call Flow</strong>:</p>
+<p>Essentially, when a program in <strong>user mode</strong> makes a system call (like reading a file), the CPU needs to switch to <strong>kernel mode</strong> to access protected resources. The transition typically happens through an interrupt or system call mechanism. This allows the operating system to safely manage privileged actions, ensuring user programs don’t directly interfere with the system&rsquo;s low-level operations.</p>
+<p>Step by step:</p>
+<p><strong>User Process:</strong>
+A <strong>user mode</strong> process (an application) starts in <strong>user mode</strong> and calls a high-level <strong>Windows API</strong> function. For example, when your application calls <code>CreateFile</code> (from <strong><code>kernel32.dll</code></strong>), it’s invoking a function provided by a subsystem DLL.</p>
+<p><strong>Subsystem DLLs:</strong><br>
+The subsystem DLLs (such as <strong><code>kernel32.dll</code></strong>, <strong>user32.dll</strong>, etc.) provide the API functions that the application uses. These DLLs contain wrappers that set up the call and then invoke lower-level routines as needed. In the case of functions like <code>CreateFile</code>, the DLL wraps the call and then delegates to a lower layer.</p>
+<p><strong><code>Ntdll.dll</code> (<strong>Native API</strong>):</strong><br>
+The next step involves <strong><code>ntdll.dll</code></strong>. This special system-wide DLL sits at the bottom of the <strong>user mode</strong> layer and contains the system call stubs(part of) these are the routines (often referred to as the <strong><strong>Native API</strong></strong> or <strong>NTAPI</strong>) that prepare the transition from <strong>user mode</strong> to <strong>kernel mode</strong>. Essentially, when a <strong>subsystem DLL</strong> calls into <code>ntdll.dll</code>, it’s setting up a system call that the CPU can execute to switch to kernel mode.</p>
+<p><strong>Executive Kernel (ntoskrnl.exe and drivers):</strong><br>
+Once the system call is issued (using instructions like syscall or sysenter), the CPU switches to kernel mode. The request is then handled by the Windows kernel (primarily in <strong>ntoskrnl.exe</strong>, which is part of the Executive Kernel). The kernel executes the requested operation by calling the appropriate drivers and kernel modules to complete the task.</p>
+<p><strong>Return Path:</strong><br>
+After the kernel completes the operation, the result is passed back through <code>ntdll.dll</code> to the <strong>subsystem DLLs</strong>, which in turn return the result to the original <strong>user mode</strong> process.</p>
+<p>So again, for consolidating, it begins with the user application calling the <code>CreateFile</code> WinAPI function which is available in <code>kernel32.dll</code> . <code>Kernel32.dll</code> is a critical DLL that exposes applications to the WinAPI and is therefore can be seen loaded by most applications. Next, <code>CreateFile</code> calls its equivalent <strong>NTAPI</strong> function, <code>NtCreateFile</code> , which is provided through <code>ntdll.dll</code> . <code>Ntdll.dll</code> then executes an assembly <strong>sysenter (x86)</strong> or <strong>syscall (x64)</strong> instruction, which transfers execution to <strong>kernel mode</strong>. The kernel <code>NtCreateFile</code> function is then used which calls kernel drivers and modules to perform the requested task.</p>
+<p><strong>Directly Invoking The <strong>Native API</strong> (NTAPI)</strong><br>
+It&rsquo;s important to note that applications can invoke syscalls (<code>NTDLL</code> functions) directly
+without having to go through the <strong>Windows API</strong>. The <strong>Windows API</strong> simply acts as a
+wrapper for the <strong>Native API</strong>. With that being said, the <strong>Native API</strong> is more difficult to use
+because it is not officially documented by Microsoft.</p>
+<p>Normally, applications use the <strong>Windows API</strong> (like <code>CreateFile</code>, <code>WriteFile</code>), which is provided by DLLs like <code>kernel32.dll</code>.</p>
+<p>Directly calling native functions from <code>ntdll.dll</code> (<strong>NTAPI</strong> functions) is possible.</p>
+<p>The <strong>Windows API</strong> is a stable, documented interface, used by most apps it&rsquo;s built on top of the <strong>Native API</strong> (<strong>NTAPI</strong>, in <code>ntdll.dll</code>). <strong>NTAPI</strong> functions are the system call stubs that handle system-level tasks, transitioning to kernel mode.</p>
+<p><strong>How the wrapping works:</strong><br>
+When you call a function like <code>CreateFile</code> from <code>kernel32.dll</code>, you&rsquo;re not directly invoking the lowest-level system routines. Instead, <code>CreateFile</code> prepares the parameters and calls a corresponding function in <code>ntdll.dll</code> (such as <code>NtCreateFile</code>).</p>
+<p><img src="https://pwnbuffer.github.io/images/tteuw/windows_architecture/func_call_flow.png" alt="Function Call Flow"></p>
+<p>The transitions flow works as follow:</p>
+<ol>
+<li><strong>User Process:</strong> Your application calls <code>CreateFile</code> in <code>kernel32.dll</code>.</li>
+<li><strong><code>Kernel32.dll</code>:</strong> This function performs any parameter checking, error translation, or compatibility work and then calls the native function (<code>NtCreateFile</code>) in <code>ntdll.dll</code>.</li>
+<li><strong><code>Ntdll.dll</code> (NTAPI):</strong> Here, the function issues the actual system call (using CPU instructions like <code>syscall</code> or <code>sysenter</code>) that transitions execution from <strong>user mode</strong> to <strong>kernel mode</strong>.</li>
+<li><strong>Kernel Mode:</strong> The Windows kernel (<code>ntoskrnl.exe</code>) processes the request, interacts with drivers, and completes the operation.</li>
+<li><strong>Return Path:</strong> The result flows back the same way, eventually returning to your application.</li>
+</ol>
+<p>May sound kinda repetitive, but it&rsquo;s really important for you to get this.</p>
+<h1 id="memory-management-in-windows">
+  Memory Management in Windows
+  <a class="heading-link" href="#memory-management-in-windows">
+    <i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h1>
+<p>Memory management is a critical component of any operating system, and Windows is no exception. The Windows memory manager is responsible for handling memory allocation, virtual memory, paging, and other low level operations that ensure efficient and memory usage by both user mode applications and the kernel.</p>
+<h2 id="virtual-memory">
+  Virtual Memory
+  <a class="heading-link" href="#virtual-memory">
+    <i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
+<p>Windows employs a <strong>virtual memory</strong> system that provides each process with its own virtual address space. This abstraction allows applications to operate as if they have a contiguous block of memory, even if the actual physical memory is fragmented or even partially stored on disk.</p>
+<ul>
+<li>Each process in <strong>user mode</strong> has a <strong>virtual address space</strong> of 4GB (for 32-bit systems) or significantly larger on 64-bit systems.</li>
+<li>The lower half of the address space (0x00000000 to 0x7FFFFFFF in 32-bit) is reserved for the application, while the upper half (0x80000000 to 0xFFFFFFFF) is reserved for the kernel.</li>
+<li>The <strong>Memory Manager</strong> is responsible for translating virtual addresses to physical addresses using <strong>page tables</strong>.</li>
+</ul>
+<h2 id="paging-and-page-faults">
+  Paging and Page Faults
+  <a class="heading-link" href="#paging-and-page-faults">
+    <i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
+<p>The <strong>Windows memory manager</strong> uses a technique called <strong>paging</strong> to manage memory efficiently:</p>
+<ul>
+<li>The system divides memory into fixed-size <strong>pages</strong> (usually 4KB).</li>
+<li>When an application requests memory, it is assigned pages from <strong>physical memory (RAM)</strong>.</li>
+<li>If a requested page is not in RAM, a <strong>page fault</strong> occurs, and Windows loads the page from disk (paging file or another storage source).</li>
+<li>The <strong>paging file</strong> (<code>pagefile.sys</code>) is used when RAM is insufficient, allowing memory pages to be temporarily stored on disk.</li>
+</ul>
+<p><strong>Page fault handling:</strong></p>
+<ol>
+<li>The CPU attempts to access a memory page.</li>
+<li>If the page is not in physical memory, a <strong>page fault</strong> occurs.</li>
+<li>The memory manager retrieves the page from disk and maps it to physical memory.</li>
+<li>The process resumes execution once the page is available.</li>
+</ol>
+<h2 id="address-space-layout-randomization-aslr">
+  Address Space Layout Randomization (ASLR)
+  <a class="heading-link" href="#address-space-layout-randomization-aslr">
+    <i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
+<p><strong>ASLR</strong> is a security feature that randomizes the memory addresses used by system and application components to make it harder for attackers to predict addresses in memory.</p>
+<ul>
+<li><strong>Executable images</strong> (e.g., <code>ntdll.dll</code>, <code>kernel32.dll</code>) are loaded at randomized locations.</li>
+<li><strong>Stack and heap</strong> allocations are randomized.</li>
+<li>This prevents predictable memory layouts, making it difficult for exploits like <strong>buffer overflows</strong> and <strong>return-oriented programming (ROP) attacks</strong> to succeed.</li>
+</ul>
+<h2 id="heap-and-stack-management">
+  Heap and Stack Management
+  <a class="heading-link" href="#heap-and-stack-management">
+    <i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
+<p>Windows manages memory using two primary structures:</p>
+<h3 id="the-stack">
+  The Stack
+  <a class="heading-link" href="#the-stack">
+    <i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>Used for function calls and local variables.</li>
+<li>Managed automatically by the CPU and OS.</li>
+<li>Has a fixed size, typically 1MB in Windows.</li>
+<li><strong>Stack Overflow</strong> occurs when too much memory is used, often due to recursive function calls.</li>
+</ul>
+<h3 id="the-heap">
+  The Heap
+  <a class="heading-link" href="#the-heap">
+    <i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>Used for dynamic memory allocation (<code>malloc</code>, <code>HeapAlloc</code>, <code>VirtualAlloc</code>).</li>
+<li>Managed by the Windows heap manager.</li>
+<li>Can grow as needed.</li>
+<li>Applications are responsible for freeing heap memory (<code>free</code>, <code>HeapFree</code>).</li>
+</ul>
+<h2 id="windows-memory-apis">
+  Windows Memory APIs
+  <a class="heading-link" href="#windows-memory-apis">
+    <i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
+<p>Windows provides several APIs for memory management:</p>
+<ul>
+<li><strong>VirtualAlloc/VirtualFree</strong> – Allocates and frees memory pages directly.</li>
+<li><strong>HeapAlloc/HeapFree</strong> – Manages dynamic memory in the process heap.</li>
+<li><strong>GlobalAlloc/LocalAlloc</strong> – Legacy functions for allocating memory.</li>
+<li><strong>MapViewOfFile</strong> – Used for memory-mapped files.</li>
+</ul>
+<h2 id="kernel-mode-memory-management">
+  Kernel Mode Memory Management
+  <a class="heading-link" href="#kernel-mode-memory-management">
+    <i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
+<p>Kernel mode memory management is more privileged and operates differently:</p>
+<ul>
+<li>The kernel uses <strong>paged pool</strong> and <strong>nonpaged pool</strong> memory.</li>
+<li><strong>Paged Pool</strong> – Can be swapped to disk.</li>
+<li><strong>Nonpaged Pool</strong> – Stays in RAM, used for critical components like drivers.</li>
+<li>The kernel uses <strong>Memory Descriptor Lists (MDLs)</strong> to track memory regions.</li>
+<li>Windows uses <strong>IRQLs (Interrupt Request Levels)</strong> to manage priority access to memory.</li>
+</ul>
+
+      </div>
+
+
+      <footer>
+        
+
+<section class="see-also">
+  
+    
+    
+    
+  
+</section>
+
+
+        
+        
+        
+        
+        
+        
+        
+      </footer>
+    </article>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css"
+    integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
+  
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"
+    integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"
+    integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"
+    onload="renderMathInElement(document.body,
+      {
+        delimiters: [
+          {left: '$$', right: '$$', display:true},
+          {left: '$', right: '$', display:false},
+          {left: '\\(', right: '\\)', display: false},
+          {left: '\\[', right: '\\]', display: true}
+        ]
+      }
+    );"></script>
+  </section>
+
+    </div>
+
+    <footer class="footer">
+  <section class="container">
+    ©
+    
+    2025
+     pwnbuffer 
+    ·
+    
+    Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/" target="_blank" rel="noopener">Coder (modified)</a>.
+    
+  </section>
+</footer>
+
+  </main>
+
+  
+
+  
+  
+  <script src="https://pwnbuffer.github.io/js/coder.min.6ae284be93d2d19dad1f02b0039508d9aab3180a12a06dcc71b0b0ef7825a317.js" integrity="sha256-auKEvpPS0Z2tHwKwA5UI2aqzGAoSoG3McbCw73gloxc="></script>
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</body>
+</html>

